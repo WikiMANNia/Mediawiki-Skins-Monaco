@@ -336,7 +336,7 @@ $this->printRightSidebar() . '
 	$searchAction = SpecialPage::newSearchPage( $wgUser )->getLocalURL();
 
 			$html .= '<div id="search_box" class="color1" role="search">
-				<form action="' . $this->get( $searchAction ) . '" id="searchform">
+				<form action="' . htmlspecialchars( $searchAction, ENT_QUOTES ) . '" id="searchform">
 					<label style="display: none;" for="searchInput">' . htmlspecialchars($searchLabel) . '</label>' .
 					Html::input( 'search', '', 'search', [
 						'id' => "searchInput",
