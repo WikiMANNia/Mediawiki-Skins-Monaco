@@ -31,19 +31,12 @@ class SkinMonaco extends SkinTemplate {
 		parent::__construct( $options );
 	}
 
-	/**
-	 * @return string
-	 */
-	public static function getSkinMonacoDefaultTheme() {
+	private static function getSkinMonacoFallbackTheme(): string {
 		return "sapphire";
 	}
 
-	/**
-	 * @return string[]
-	 */
-	public static function getSkinMonacoThemeList() {
-		return [ "beach", "brick", "carbon", "forest", "gaming", "jade", "moonlight", "obsession", "ruby", "sapphire",
-			"sky", "slate", "smoke", "spring" ];
+	public static function getSkinMonacoThemeList(): array {
+		return [ "beach", "brick", "carbon", "forest", "gaming", "jade", "moonlight", "obsession", "ruby", "sapphire", "sky", "slate", "smoke", "spring" ];
 	}
 
 	/**
@@ -64,27 +57,32 @@ class SkinMonaco extends SkinTemplate {
 		}
 
 		$request = $this->getRequest();
+		$themes = self::getSkinMonacoThemeList();
 		$user = RequestContext::getMain()->getUser();
 		// Check the following things in this order:
-		// 1) value of $wgDefaultTheme (set in site configuration)
+		// 1) value of $wgMonacoTheme (set in site configuration)
 		// 2) user's personal preference/override
 		// 3) per-page usetheme URL parameter
-		$theme = $this->config->get( 'MonacoTheme' );
-		$theme = $this->mUserOptionsLookup->getOption( $user, 'theme_monaco', $theme );
-		$theme = $request->getText( 'usetheme', $theme );
-
-		$themes = self::getSkinMonacoThemeList();
-		$theme_fallback = self::getSkinMonacoDefaultTheme();
-		if ( !in_array( $theme, $themes ) ) {
-			$theme = $theme_fallback;
+		$theme_fallback = self::getSkinMonacoFallbackTheme();
+		$theme_default = $this->config->get( 'MonacoTheme', $theme_fallback );
+		if ( !in_array( $theme_default, $themes ) ) {
+			// May be $wgMonacoTheme is not in the list (i.e. because a misspelling)
+			$theme_default = $theme_fallback;
 		}
-
+		$theme = $theme_default;
 		if ( $this->config->get( 'MonacoAllowUseTheme' ) ) {
-			// Theme is another conditional feature, we can't really resource load this
-			if ( isset( $theme ) && is_string( $theme ) && ( $theme != $theme_fallback ) ) {
-				$out->addStyle( "Monaco/style/{$theme}/css/main.css", 'screen' );
+			$theme_user = $this->mUserOptionsLookup->getOption( $user, 'theme_monaco', $theme_default );
+			if ( !in_array( $theme_user, $themes ) ) {
+				$theme_user = $theme_default;
+			}
+			$theme = $request->getText( 'usetheme', $theme_user );
+			if ( !in_array( $theme, $themes ) ) {
+				$theme = $theme_user;
 			}
 		}
+
+		// Theme is another conditional feature, we can't really resource load this
+		$out->addStyle( "Monaco/style/{$theme}/css/main.css", 'screen' );
 
 		// TODO: explicit RTL style sheets are supposed to be obsolete w/ResourceLoader
 		// I have no way to test this currently, however. -haleyjd
