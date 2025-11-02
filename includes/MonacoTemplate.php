@@ -34,9 +34,8 @@ class MonacoTemplate extends BaseTemplate {
 	 * @author Daniel Friesen
 	 */
 	private function useUserMore(): bool {
-		global $wgMonacoUseMoreButton;
 
-		return $wgMonacoUseMoreButton;
+		return $this->mConfig->get( 'MonacoUseMoreButton' );
 	}
 
 	public function execute() {
@@ -459,6 +458,7 @@ class MonacoTemplate extends BaseTemplate {
 			<!-- SEARCH/NAVIGATION -->
 			<div class="widget sidebox navigation_box" id="navigation_widget" role="navigation">';
 
+		$MonacoSearchDefaultFulltext = $this->mConfig->get( 'MonacoSearchDefaultFulltext' );
 		$msgSearchLabel = wfMessage( 'Tooltip-search' )->escaped();
 		$searchLabel = wfMessage( 'Tooltip-search' )->isDisabled()
 			? ( wfMessage( 'ilsubmit' )->escaped() . ' ' . $sitename . '...' )
@@ -477,8 +477,7 @@ class MonacoTemplate extends BaseTemplate {
 						'aria-required' => 'true',
 						'aria-flowto' => "search-button",
 					] + Linker::tooltipAndAccesskeyAttribs( 'search' ) );
-					global $wgSearchDefaultFulltext;
-					$html .= '<input type="hidden" name="' . ( $wgSearchDefaultFulltext ? 'fulltext' : 'go' ) .
+					$html .= '<input type="hidden" name="' . ( $MonacoSearchDefaultFulltext ? 'fulltext' : 'go' ) .
 						'" value="1" />
 					<input type="image" alt="' . htmlspecialchars( wfMessage( 'search' )->escaped() ) .
 						'" src="' . $this->get( 'blankimg' ) .
@@ -527,7 +526,8 @@ class MonacoTemplate extends BaseTemplate {
 				'icon' => 'edit',
 				];
 			}
-			global $wgEnableUploads, $wgUploadNavigationUrl;
+			$EnableUploads = $this->mConfig->get( 'EnableUploads' );
+			$UploadNavigationUrl = $this->mConfig->get( 'UploadNavigationUrl' );
 			if ( ( $wgEnableUploads || $wgUploadNavigationUrl ) && ( $user->isAllowed( 'upload' ) ||
 					$user->isAnon() || $wgUploadNavigationUrl ) ) {
 				$uploadPage = SpecialPage::getTitleFor( 'Upload' );
@@ -633,13 +633,18 @@ class MonacoTemplate extends BaseTemplate {
 		}
 
 		if ( is_array( $linksArray ) && count( $linksArray ) > 0 ) {
-			global $wgSpecialPagesRequiredLogin;
+			$MonacoSpecialPagesRequiredLogin = $this->mConfig->get( 'MonacoSpecialPagesRequiredLogin' );
+
+			if ( !is_array( $MonacoSpecialPagesRequiredLogin ) ) {
+				$MonacoSpecialPagesRequiredLogin = [];
+			}
+
 			for ( $i = 0, $max = max( array_keys( $linksArray ) ); $i <= $max; $i++ ) {
 				$item = isset( $linksArray[$i] ) ? $linksArray[$i] : false;
 				// Redirect to login page instead of showing error, see Login friction project
 				if ( ( $item !== false ) && $user->isAnon() && isset( $item['specialCanonicalName'] ) &&
-					$wgSpecialPagesRequiredLogin &&
-					in_array( $item['specialCanonicalName'], $wgSpecialPagesRequiredLogin ) ) {
+					$MonacoSpecialPagesRequiredLogin &&
+					in_array( $item['specialCanonicalName'], $MonacoSpecialPagesRequiredLogin ) ) {
 					$returnto = SpecialPage::getTitleFor( $item['specialCanonicalName'] )->getPrefixedDBkey();
 					$item['href'] = SpecialPage::getTitleFor( 'Userlogin' )->getLocalURL( [ "returnto" => $returnto ] );
 				}
@@ -689,6 +694,7 @@ class MonacoTemplate extends BaseTemplate {
 					$html .= '</ul>
 				</td>
 			</tr>';
+
 			$MonacoEnablePaypal  = $this->mConfig->get( 'MonacoEnablePaypal' );
 			$MonacoPaypalID      = $this->mConfig->get( 'MonacoPaypalID' );
 			$MonacoEnablePatreon = $this->mConfig->get( 'MonacoEnablePatreon' );
