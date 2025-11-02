@@ -107,15 +107,12 @@ class SkinMonaco extends SkinTemplate {
 		return $modules;
 	}
 
-	/**
-	 * @return bool
-	 */
-	public function showMasthead() {
+	public function showMasthead(): bool {
 		if ( !$this->config->get( 'MonacoUseMasthead' ) ) {
 			return false;
 		}
 
-		return (bool)$this->getMastheadUser();
+		return is_bool( $this->getMastheadUser() ) ? false : true;
 	}
 
 	/**
@@ -138,10 +135,7 @@ class SkinMonaco extends SkinTemplate {
 		return $this->mMastheadUser;
 	}
 
-	/**
-	 * @return bool
-	 */
-	public function isMastheadTitleVisible() {
+	public function isMastheadTitleVisible(): bool {
 		if ( !$this->showMasthead() ) {
 			return true;
 		}

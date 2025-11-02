@@ -839,10 +839,7 @@ class MonacoTemplate extends BaseTemplate {
 		$this->set( 'userlinks', $this->getUserLinks() );
 	}
 
-	/**
-	 * @return array
-	 */
-	private function getArticleLinks() {
+	private function getArticleLinks(): array {
 		$skin = $this->getSkin();
 
 		$links = [];
@@ -942,10 +939,7 @@ class MonacoTemplate extends BaseTemplate {
 		return $links;
 	}
 
-	/**
-	 * @return array
-	 */
-	private function getUserLinks() {
+	private function getUserLinks(): array {
 		$skin = $this->getSkin();
 
 		$data = [];
@@ -1151,11 +1145,8 @@ class MonacoTemplate extends BaseTemplate {
 		return $html;
 	}
 
-	/**
-	 * @return bool
-	 */
-	protected function hasRightSidebar() {
-		return (bool)trim( $this->mRightSidebar );
+	protected function hasRightSidebar(): bool {
+		return !empty( trim( $this->mRightSidebar ) );
 	}
 
 	/**
@@ -1528,16 +1519,16 @@ class MonacoTemplate extends BaseTemplate {
 
 	/**
 	 * Made a separate method so recipes, answers, etc can override. Notably, answers turns it off.
-	 * @return string
 	 */
-	protected function printFirstHeading() {
+	protected function printFirstHeading(): string {
 		$hookContainer = $this->getHookContainer();
 		if ( !$this->data['skin']->isMastheadTitleVisible() ) {
-			return;
+			return '';
 		}
 		$html = '<h1 id="firstHeading" class="firstHeading" aria-level="1">' . $this->get( 'title' );
 		$hookContainer->run( 'MonacoPrintFirstHeading' );
 		$html .= '</h1>';
+
 		return $html;
 	}
 
