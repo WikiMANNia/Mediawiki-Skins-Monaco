@@ -13,6 +13,7 @@
 	"monaco-footer-improve": "Verbeter {{SITENAME}} met $1",
 	"monaco-footer-improve-linktext": "deze pagina bewerken",
 	"monaco-footer-lastedit": "$1 heeft een bewerking gemaakt op $2",
+	"monacocontentrightsidebar-desc": "Voegt een parserlabel toe met de mogelijkheid om inhoud in de rechterzijbalk aan het uiterlijk Monaco toe te voegen.",
 	"viewrandompage": "Willekeurige pagina bekijken",
 	"masthead-anonymous-user": "Anonieme gebruiker",
 	"skinname-monaco": "Monaco",
