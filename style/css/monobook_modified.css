@@ -97,7 +97,7 @@ h1, h2, h3, h4, h5, h6 {
 h1 { font-size: 188%; }
 h1 .editsection { font-size: 53%; }
 h2 {
-	font-size: 150%; 
+	font-size: 150%;
 }
 h2 .editsection { font-size: 67%; }
 h3, h4, h5, h6 {
@@ -191,7 +191,6 @@ pre {
 	background-color: #f9f9f9;
 	line-height: 1.1em;
 	overflow: auto;
-	max-height: 800px;
 }
 
 /*
@@ -743,7 +742,7 @@ div#userloginForm .captcha {
 }
 
 .page-Special_UserLogin .firstHeading {
-	display: none !important;	
+	display: none !important;
 }
 */
 
@@ -1038,7 +1037,7 @@ input#wpPreview {
 
 #editform .editOptions {
 	display: inline;
-	
+
 	/* haleyjd 20140420: must override some options getting inherited from monobook or somewhere... */
 	background: none;
 	border:     none;
@@ -1056,8 +1055,8 @@ input#wpPreview {
 
 /* Classes for article validation */
 
-select#wpaccuracy, select#wpdepth, select#wpstyle, 
-input#mw-fr-commentbox, input#mw-fr-submit-accept, 
+select#wpaccuracy, select#wpdepth, select#wpstyle,
+input#mw-fr-commentbox, input#mw-fr-submit-accept,
 input#mw-fr-submit-unaccept, input#mw-fr-submit-reject {
 	font-family: inherit;
 }
